@@ -10,32 +10,36 @@ class LiveDataController < ApplicationController
   # GET /live_data/1
   # GET /live_data/1.json
   def show
-    p "ok"
-    require "selenium-webdriver"
-    require "nokogiri"
-    require "active_support"
     require 'capybara'
+    require 'capybara/dsl'
+    require 'selenium-webdriver'
 
-    Capybara.register_driver :headless_chrome do |app|
-      capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-          chromeOptions: { args: %w(headless disable-gpu) }
-      )
+    chrome_option_arg = ['headless', 'disable-gpu', 'window-size=1680,1050']
 
+    Capybara.register_driver(:selenium) do |x|
       Capybara::Selenium::Driver.new(
-          app,
-          browser: :chrome,
-          desired_capabilities: capabilities
-      )
-      
-      url = "https://sketch.pixiv.net/lives"
+        x,
+        browser: :chrome,
+        desired_capabilities: Selenium::WebDriver::Remote::Capabilities.chrome(chrome_options: { args: %w(headless disable-gpu window-size=1680,1050) })
+      );
+    end
 
-      driver = Selenium::WebDriver.for :headless_chrome
-      driver.navigate.to url
-      # sleep 10
-      wait = Selenium::WebDriver::Wait.new(:timeout => 10) # second
-      wait.until { driver.find_element(:id, 'LivesItem').displayed? }
+    Capybara.javascript_driver = :headless_chrome
 
-      doc = Nokogiri::HTML.parse(driver.page_source)
+    Capybara.configure do |x|
+      x.default_max_wait_time = 10
+      x.default_driver = :selenium
+    end
+
+    @b = Capybara.current_session
+    # include Capybara::DSL;
+
+    @b.visit('https://sketch.pixiv.net/lives')
+
+    @b.windows.each do |w|
+      @b.switch_to_window(w)
+      @b.save_screenshot
+      doc = Nokogiri::HTML.parse(@b.html)
       doc.xpath('//div[@class="Live"]').each do |node|
         p "ユーザー名"
         p node.css('.owner').text
@@ -44,9 +48,7 @@ class LiveDataController < ApplicationController
         p "配信URL"
         p node.css('.thumb').attribute('href').text      
       end
-      p "shit"
     end
-    p "fuck"
   end
 
   # GET /live_data/new
