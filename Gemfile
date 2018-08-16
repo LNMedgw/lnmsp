@@ -5,9 +5,7 @@ ruby '2.4.3'
 
 gem 'selenium-webdriver'
 gem 'nokogiri'
-gem 'active_support'
 gem 'capybara'
-
 gem 'chromedriver-helper'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -58,9 +56,6 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15', '< 4.0'
-  gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
 end
