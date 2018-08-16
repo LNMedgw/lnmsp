@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Username:</strong>
+  <%= @live_datum.username %>
+</p>
+
+<p>
+  <strong>Liveurl:</strong>
+  <%= @live_datum.liveurl %>
+</p>
+
+<p>
+  <strong>Streamstart:</strong>
+  <%= @live_datum.streamstart %>
+</p>
+
+<p>
+  <strong>Thumbnailurl:</strong>
+  <%= @live_datum.thumbnailurl %>
+</p>
+
+<%= link_to 'Edit', edit_live_datum_path(@live_datum) %> |
+<%= link_to 'Back', live_data_path %>

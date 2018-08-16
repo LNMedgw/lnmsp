@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: MyString
+  liveurl: MyString
+  streamstart: 2018-08-06 15:40:27
+  thumbnailurl: MyString
+
+two:
+  username: MyString
+  liveurl: MyString
+  streamstart: 2018-08-06 15:40:27
+  thumbnailurl: MyString

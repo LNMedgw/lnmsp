@@ -1,0 +1,2 @@
+class LiveDatum < ApplicationRecord
+end

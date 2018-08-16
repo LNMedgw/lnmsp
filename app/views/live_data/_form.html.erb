@@ -1,0 +1,37 @@
+<%= form_with(model: live_datum, local: true) do |form| %>
+  <% if live_datum.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(live_datum.errors.count, "error") %> prohibited this live_datum from being saved:</h2>
+
+      <ul>
+      <% live_datum.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :username %>
+    <%= form.text_field :username %>
+  </div>
+
+  <div class="field">
+    <%= form.label :liveurl %>
+    <%= form.text_field :liveurl %>
+  </div>
+
+  <div class="field">
+    <%= form.label :streamstart %>
+    <%= form.datetime_select :streamstart %>
+  </div>
+
+  <div class="field">
+    <%= form.label :thumbnailurl %>
+    <%= form.text_field :thumbnailurl %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

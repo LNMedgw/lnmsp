@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Live Data</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Liveurl</th>
+      <th>Streamstart</th>
+      <th>Thumbnailurl</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @live_data.each do |live_datum| %>
+      <tr>
+        <td><%= live_datum.username %></td>
+        <td><%= live_datum.liveurl %></td>
+        <td><%= live_datum.streamstart %></td>
+        <td><%= live_datum.thumbnailurl %></td>
+        <td><%= link_to 'Show', live_datum %></td>
+        <td><%= link_to 'Edit', edit_live_datum_path(live_datum) %></td>
+        <td><%= link_to 'Destroy', live_datum, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Live Datum', new_live_datum_path %>
