@@ -10,43 +10,43 @@ class LiveDataController < ApplicationController
   # GET /live_data/1
   # GET /live_data/1.json
   def show
-    p "ok"
-    require "selenium-webdriver"
-    require "nokogiri"
-    require "active_support"
+    require 'selenium-webdriver'
     require 'capybara'
+    require 'nokogiri'
+    # Capybara自体の設定、ここではどのドライバーを使うかを設定しています
+    Capybara.configure do |capybara_config|
+      capybara_config.default_driver = :selenium_chrome
+      capybara_config.default_max_wait_time = 10 # 一つのテストに10秒以上かかったらタイムアウトするように設定しています
+    end
+    # Capybaraに設定したドライバーの設定をします
+    Capybara.register_driver :selenium_chrome do |app|
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument('headless') # ヘッドレスモードをonにするオプション
+      options.add_argument('--disable-gpu') # 暫定的に必要なフラグとのこと
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+    end
 
-    Capybara.register_driver :headless_chrome do |app|
-      capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-          chromeOptions: { args: %w(headless disable-gpu) }
-      )
+    Capybara.javascript_driver = :selenium_chrome
 
-      Capybara::Selenium::Driver.new(
-          app,
-          browser: :chrome,
-          desired_capabilities: capabilities
-      )
-      
-      url = "https://sketch.pixiv.net/lives"
 
-      driver = Selenium::WebDriver.for :headless_chrome
-      driver.navigate.to url
-      # sleep 10
-      wait = Selenium::WebDriver::Wait.new(:timeout => 10) # second
-      wait.until { driver.find_element(:id, 'LivesItem').displayed? }
+    @b = Capybara.current_session
+    # include Capybara::DSL;
 
-      doc = Nokogiri::HTML.parse(driver.page_source)
+    @b.visit('https://sketch.pixiv.net/lives')
+
+    @b.windows.each do |w|
+      @b.switch_to_window(w)
+      @b.save_screenshot
+      doc = Nokogiri::HTML.parse(@b.html)
       doc.xpath('//div[@class="Live"]').each do |node|
         p "ユーザー名"
         p node.css('.owner').text
         p "配信タイトル"
         p node.css('.LiveFoot').text
         p "配信URL"
-        p node.css('.thumb').attribute('href').text      
+        p node.css('.thumb').attribute('href').text
       end
-      p "shit"
     end
-    p "fuck"
   end
 
   # GET /live_data/new
