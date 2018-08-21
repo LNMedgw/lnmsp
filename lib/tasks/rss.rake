@@ -27,7 +27,6 @@ namespace :rss do
 
 	  @b.windows.each do |w|
 	    @b.switch_to_window(w)
-	    @b.save_screenshot
 	    doc = Nokogiri::HTML.parse(@b.html)
 	    doc.xpath('//div[@class="Live"]').each do |node|
 	      p "ユーザー名"
