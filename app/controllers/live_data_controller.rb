@@ -10,41 +10,43 @@ class LiveDataController < ApplicationController
   # GET /live_data/1
   # GET /live_data/1.json
   def show
-    p "ok"
-    require "nokogiri"
-    require 'capybara'
-    require 'capybara/dsl'
     require 'selenium-webdriver'
-
-    chrome_option_arg = ['headless', 'disable-gpu', 'window-size=1680,1050']
-
-    Capybara.register_driver(:selenium) do |x|
-      Capybara::Selenium::Driver.new(
-        x,
-        browser: :chrome,
-        desired_capabilities: Selenium::WebDriver::Remote::Capabilities.chrome(chrome_options: { args: chrome_option_arg })
-      );
+    require 'capybara'
+    require 'nokogiri'
+    # Capybara自体の設定、ここではどのドライバーを使うかを設定しています
+    Capybara.configure do |capybara_config|
+      capybara_config.default_driver = :selenium_chrome
+      capybara_config.default_max_wait_time = 10 # 一つのテストに10秒以上かかったらタイムアウトするように設定しています
+    end
+    # Capybaraに設定したドライバーの設定をします
+    Capybara.register_driver :selenium_chrome do |app|
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument('headless') # ヘッドレスモードをonにするオプション
+      options.add_argument('--disable-gpu') # 暫定的に必要なフラグとのこと
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
     end
 
-    Capybara.javascript_driver = :chrome
+    Capybara.javascript_driver = :selenium_chrome
 
-    Capybara.configure do |x|
-      x.default_max_wait_time = 10
-      x.default_driver = :selenium
-    end
 
     @b = Capybara.current_session
     # include Capybara::DSL;
 
-    @b.visit('http://xxx')
-    @b.first(:xpath, "//h3[@class='xxx-title']/a").click
+    @b.visit('https://sketch.pixiv.net/lives')
 
     @b.windows.each do |w|
       @b.switch_to_window(w)
       @b.save_screenshot
-      driver.switchTo(currentWindow) 
+      doc = Nokogiri::HTML.parse(@b.html)
+      doc.xpath('//div[@class="Live"]').each do |node|
+        p "ユーザー名"
+        p node.css('.owner').text
+        p "配信タイトル"
+        p node.css('.LiveFoot').text
+        p "配信URL"
+        p node.css('.thumb').attribute('href').text
+      end
     end
-    p "fuck"
   end
 
   # GET /live_data/new
