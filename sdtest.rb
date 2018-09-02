@@ -15,8 +15,22 @@ doc = Nokogiri::HTML.parse(driver.page_source)
 doc.xpath('//div[@class="Live"]').each do |node|
 	p "ユーザー名"
 	p node.css('.owner').text
-	p "配信タイトル"
-	p node.css('.LiveFoot').text
+	user = node.css('.owner').text
 	p "配信URL"
   p node.css('.thumb').attribute('href').text
+  lurl = node.css('.thumb').attribute('href').text
+	p "配信タイトル"
+	p node.css('.LiveFoot').text
+	p "サムネURL"
+  p node.css('.MediaBody').attribute('src').text
+  turl = node.css('.MediaBody').attribute('src').text
+
+  @live_datum = LiveDatum.new(live_datum_params)
+  @live_datum.attributes = {
+  	username: "#{user}",
+  	liveurl: "#{lurl}", 
+  	streamstart: , 
+  	thumbnailurl: "#{turl}"
+  	}
+  @live_datum.save
 end
