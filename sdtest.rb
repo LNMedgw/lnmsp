@@ -4,6 +4,18 @@ require "active_support"
 
 p Time.now
 
+  @live_datum = LiveDatum.new(
+  	username: "あ", 
+  	liveurl: "abc", 
+  	streamstart: , 
+  	thumbnailurl: "ABC"
+  	)
+  @live_datum.save
+
+html_txt = open("https://sketch.pixiv.net/lives").read
+html_txt_utf8 = html_txt.kconv(Kconv::UTF8, Kconv::EUC)
+doc = Nokogiri(html_txt_utf8,'nil','UTF-8')
+
 url = "https://sketch.pixiv.net/lives"
 
 driver = Selenium::WebDriver.for :chrome
@@ -25,12 +37,11 @@ doc.xpath('//div[@class="Live"]').each do |node|
   p node.css('.MediaBody').attribute('src').text
   turl = node.css('.MediaBody').attribute('src').text
 
-  @live_datum = LiveDatum.new(live_datum_params)
-  @live_datum.attributes = {
+  @live_datum = LiveDatum.new(
   	username: "#{user}",
   	liveurl: "#{lurl}", 
   	streamstart: , 
   	thumbnailurl: "#{turl}"
-  	}
+  	)
   @live_datum.save
 end
