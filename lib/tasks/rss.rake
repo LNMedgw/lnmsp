@@ -19,6 +19,10 @@ namespace :rss do
 
 	  Capybara.javascript_driver = :selenium_chrome
 
+	  p "現在日時"
+	  now = DateTime.now
+	  p "#{now}"
+
 
 	  @b = Capybara.current_session
 	  # include Capybara::DSL;
@@ -28,14 +32,46 @@ namespace :rss do
 	  @b.windows.each do |w|
 	    @b.switch_to_window(w)
 	    doc = Nokogiri::HTML.parse(@b.html)
-	    doc.xpath('//div[@class="Live"]').each do |node|
-	      p "ユーザー名"
-	      p node.css('.owner').text
-	      p "配信タイトル"
-	      p node.css('.LiveFoot').text
-	      p "配信URL"
-	      p node.css('.thumb').attribute('href').text
+			doc.xpath('//div[@class="Live"]').each do |node|
+				p "--------------------"
+				p "ユーザー名"
+				p node.css('.owner').text
+				user = node.css('.owner').text
+				p "配信URL"
+			  p node.css('.thumb').attribute('href').text
+			  lurl = node.css('.thumb').attribute('href').text
+				p "配信タイトル"
+				p node.css('.LiveFoot').text
+				p "サムネURL"
+			  p node.css('.MediaBody').attribute('src').text
+			  turl = node.css('.MediaBody').attribute('src').text
+
+			  check = LiveDatum.find_by(username: "#{user}")
+			  if !check
+				  @live_datum = LiveDatum.new(
+				  	username: "#{user}",
+				  	liveurl: "#{lurl}", 
+				  	streamstart: "#{now}", 
+				  	thumbnailurl: "#{turl}"
+				  	)
+				  @live_datum.save
+				  p "#{user}が配信を開始しました"
+				else
+					@live_datum.update(
+						username: "#{user}",
+				  	liveurl: "#{lurl}", 
+				  	streamstart: "#{now}", 
+				  	thumbnailurl: "#{turl}"
+						)
+				  @live_datum.save
+				end
+
+				p "--------------------"
 	    end
+
+		old = LiveDatum.where.not(streamstart: "#{now}")
+		@LiveDatum.destroy
+
 	  end
   end
 end
