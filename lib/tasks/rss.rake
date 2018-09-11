@@ -57,20 +57,19 @@ namespace :rss do
 				  @live_datum.save
 				  p "#{user}が配信を開始しました"
 				else
-					@live_datum.update(
-						username: "#{user}",
-				  	liveurl: "#{lurl}", 
-				  	streamstart: "#{now}", 
-				  	thumbnailurl: "#{turl}"
+					check.update(
+				  	streamstart: "#{now}"
 						)
-				  @live_datum.save
 				end
 
 				p "--------------------"
 	    end
 
-		old = LiveDatum.where.not(streamstart: "#{now}")
-		@LiveDatum.destroy
+		@old = LiveDatum.where.not(streamstart: "#{now}")
+		@old.each do |old|
+			p "#{old.username}の配信が終了しました"
+			old.destroy
+		end
 
 	  end
   end
