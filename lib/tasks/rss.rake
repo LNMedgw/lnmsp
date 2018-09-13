@@ -27,11 +27,13 @@ namespace :rss do
 	  @b = Capybara.current_session
 	  	
   	# login
-	  @b.visit 'https://accounts.pixiv.net/login'
-	  @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[1]/input', with: 'user_zzeh3337')
-	  @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[2]/input', with: 'edgwedgw')
-	  # @b.all(:xpath, '//*[@id="LoginComponent"]/form/div[1]/div[1]/input').set('user_zzeh3337')
-	  # @b.all(:xpath, '//*[@id="LoginComponent"]/form/div[1]/div[2]/input').set('edgwedgw')
+	  @b.visit ('https://accounts.pixiv.net/login?lang=ja&source=pc&view_type=page&ref=wwwtop_accounts_index')
+	  @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[1]/input').set('user_zzeh3337')
+	  @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[2]/input').set('edgwedgw')
+	  # @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[1]/input', with: 'user_zzeh3337')
+	  # @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[2]/input', with: 'edgwedgw')
+	  # @b.fill_in('#LoginComponent > form > div.input-field-group > div:nth-child(1) > input[type="text"]', with: 'user_zzeh3337')
+	  # @b.fill_in('#LoginComponent > form > div.input-field-group > div:nth-child(2) > input[type="password"]', with: 'edgwedgw')
 	  # @b.fill_in 'username', with: 'capybara'
 	  # @b.fill_in 'password', with: 'rails'
 	  @b.click_link 'ログイン'
