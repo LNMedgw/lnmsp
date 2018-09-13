@@ -28,8 +28,10 @@ namespace :rss do
 	  	
   	# login
 	  @b.visit 'https://accounts.pixiv.net/login'
-	  @b.all(:xpath, '//*[@id="LoginComponent"]/form/div[1]/div[1]/input').set('user_zzeh3337')
-	  @b.all(:xpath, '//*[@id="LoginComponent"]/form/div[1]/div[2]/input').set('edgwedgw')
+	  @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[1]/input', with: 'user_zzeh3337')
+	  @b.fill_in(:xpath '//*[@id="LoginComponent"]/form/div[1]/div[2]/input', with: 'edgwedgw')
+	  # @b.all(:xpath, '//*[@id="LoginComponent"]/form/div[1]/div[1]/input').set('user_zzeh3337')
+	  # @b.all(:xpath, '//*[@id="LoginComponent"]/form/div[1]/div[2]/input').set('edgwedgw')
 	  # @b.fill_in 'username', with: 'capybara'
 	  # @b.fill_in 'password', with: 'rails'
 	  @b.click_link 'ログイン'
