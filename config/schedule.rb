@@ -4,7 +4,7 @@ set :output, File.join(Whenever.path, "log", "cron.log")
 # ジョブの実行環境の指定
 set :environment, :development
 
-every 1.minutes do
+every 10.minutes do
   begin
     rake "rss:hello"
   rescue => e
